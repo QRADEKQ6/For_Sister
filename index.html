@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Świąteczna opowieść dla Otylii</title>
+
+<style>
+:root{
+ --bg:#f6efe7;
+ --cream:#fff9f0;
+ --red:#b63a2f;
+ --green:#3f6b4f;
+ --gold:#c9a24d;
+ --text:#4a3b2f;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ background:linear-gradient(180deg,var(--bg),var(--cream));
+ font-family:Georgia,serif;
+ color:var(--text);
+ overflow:hidden;
+}
+
+.scene{
+ height:100vh;
+ width:100vw;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ position:absolute;
+ inset:0;
+ opacity:0;
+ transform:scale(0.96);
+ transition:opacity 1.2s ease, transform 1.2s ease;
+}
+.scene.active{
+ opacity:1;
+ transform:scale(1);
+}
+
+.text{
+ font-size:clamp(2rem,6vw,4rem);
+ text-align:center;
+ line-height:1.3;
+}
+
+.stitched text{
+ fill:none;
+ stroke:var(--red);
+ stroke-width:2;
+ stroke-dasharray:1200;
+ stroke-dashoffset:1200;
+ animation:sew 5s forwards ease-in-out;
+}
+
+@keyframes sew{to{stroke-dashoffset:0}}
+
+.thread-path{
+ stroke:var(--red);
+ stroke-width:3;
+ fill:none;
+ stroke-dasharray:800;
+ stroke-dashoffset:800;
+ animation:thread 4s forwards ease-in-out;
+}
+
+@keyframes thread{to{stroke-dashoffset:0}}
+
+.hook{
+ width:120px;
+ animation:hookMove 4s ease-in-out infinite alternate;
+}
+@keyframes hookMove{
+ from{transform:rotate(-10deg) translateX(-20px)}
+ to{transform:rotate(10deg) translateX(20px)}
+}
+
+.wafer{
+ width:220px;
+ height:140px;
+ background:repeating-linear-gradient(
+ 45deg,#fff,#fff 10px,#f2eee7 10px,#f2eee7 20px);
+ border-radius:8px;
+ position:relative;
+ overflow:hidden;
+}
+
+.wafer::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ background:linear-gradient(90deg,transparent,rgba(182,58,47,0.6),transparent);
+ animation:break 4s forwards ease-in-out;
+}
+
+@keyframes break{
+ 0%{transform:translateX(-100%)}
+ 50%{transform:translateX(0)}
+ 100%{transform:translateX(100%)}
+}
+
+.footer{
+ position:absolute;
+ bottom:40px;
+ font-size:1.2rem;
+ opacity:.8;
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="videoplayback.mp3" type="audio/mpeg">
+</audio>
+<button id="musicBtn" style="position:fixed;top:20px;right:20px;z-index:10;background:var(--red);color:#fff;border:none;padding:10px 14px;border-radius:20px;cursor:pointer">▶ Muzyka</button>
+
+<div class="scene active" id="s1">
+ <svg class="stitched" viewBox="0 0 700 200" width="90%">
+  <path class="thread-path" d="M30 140 Q200 20 350 120 T670 100" />
+  <text x="50%" y="140" text-anchor="middle" font-size="82">Otylio…</text>
+ </svg>
+</div>
+
+<div class="scene" id="s2">
+ <div class="text">Twoje ręce<br>tworzą ciepło   </div>
+ <img class="hook" src="gift-box.png" alt="Szydełko" />
+</div>
+
+<div class="scene" id="s3">
+ <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem">
+  <div class="text">Chwile, które<br>grzeją serce</div>
+  <img src="siostry.jpg" style="border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.15)" />
+ </div>
+</div>
+
+<div class="scene" id="s4">
+ <div style="display:flex;flex-direction:column;align-items:center;gap:2rem">
+  <div class="wafer"></div>
+  <div class="text">Niech przy wigilijnym stole<br>każdy gest będzie jak ścieg –<br>pełen ciepła, troski i bliskości</div>
+ </div>
+</div>
+
+<div class="scene" id="s5">
+ <div class="text">Niech Twoje Święta będą<br>utkane z miłości,<br>spokoju i spełnionych marzeń</div>
+ <div class="footer">Z całego serca ❤️</div>
+</div>
+
+<script>
+const music=document.getElementById('bgMusic');
+const btn=document.getElementById('musicBtn');
+let playing=false;
+btn.onclick=()=>{
+ if(!playing){music.play();btn.textContent='⏸ Muzyka'}
+ else{music.pause();btn.textContent='▶ Muzyka'}
+ playing=!playing;
+};
+
+
+const scenes=[...document.querySelectorAll('.scene')];('.scene');
+let i=0;
+setInterval(()=>{
+ scenes[i].classList.remove('active');
+ i=(i+1)%scenes.length;
+ scenes[i].classList.add('active');
+},6500);
+</script>
+
+</body>
+</html>
